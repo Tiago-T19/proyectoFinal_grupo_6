@@ -1,7 +1,46 @@
-import { useState } from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import { Container, Card, Button, ListGroup, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Datos de las 5 rondas
+function LoginScreen({ onComenzar }) {
+  const [nombreInput, setNombreInput] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (nombreInput.trim() !== '') {
+      onComenzar(nombreInput);
+    }
+  };
+
+  return (
+    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+      <Card className="p-4 shadow" style={{ width: '100%', maxWidth: '400px', borderRadius: '15px' }}>
+        <Card.Body>
+          <h2 className="text-center mb-4 text-primary">Aventura en la Granja 🚜</h2>
+          <p className="text-center text-muted mb-4">¡Ingresá tu nombre para comenzar a jugar!</p>
+          
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Nombre del niño/a"
+                value={nombreInput}
+                onChange={(e) => setNombreInput(e.target.value)}
+                required
+                size="lg"
+              />
+            </Form.Group>
+
+            <Button variant="success" type="submit" className="w-100 py-2" size="lg">
+              Comenzar 🚀
+            </Button>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
+  );
+}
+
 const ROUNDS = [
   { id: 1, animalName: 'Vaca', animalEmoji: '🐄', options: ['Pasto', 'Carne', 'Banana'], answer: 'Pasto' },
   { id: 2, animalName: 'Gallina', animalEmoji: '🐔', options: ['Maíz', 'Pasto', 'Pescado'], answer: 'Maíz' },
@@ -10,21 +49,22 @@ const ROUNDS = [
   { id: 5, animalName: 'Caballo', animalEmoji: '🐴', options: ['Pasto y Zanahoria', 'Pollo', 'Helado'], answer: 'Pasto y Zanahoria' },
 ];
 
-function App() {
+function JuegoUno({ nombre, onTerminar }) {
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [resultMessage, setResultMessage] = useState('');
-  const [isGameOver, setIsGameOver] = useState(false);
 
   const handleOptionClick = (selectedFood) => {
-    if (showResult) return; // Evita múltiples clicks mientras se muestra el mensaje
+    if (showResult) return;
 
     const currentAnimal = ROUNDS[currentRound];
     const isCorrect = selectedFood === currentAnimal.answer;
+    let nuevoPuntaje = score;
 
     if (isCorrect) {
-      setScore(prevScore => prevScore + 10);
+      nuevoPuntaje = score + 10;
+      setScore(nuevoPuntaje);
       setResultMessage(`¡Correcto! La ${currentAnimal.animalName} comió feliz. 😋`);
     } else {
       setResultMessage(`¡Esa no es su comida! 🤢`);
@@ -32,69 +72,157 @@ function App() {
 
     setShowResult(true);
 
-    // Esperar 2 segundos para mostrar el mensaje y pasar a la siguiente ronda
     setTimeout(() => {
       setShowResult(false);
-      
       if (currentRound < ROUNDS.length - 1) {
         setCurrentRound(prevRound => prevRound + 1);
       } else {
-        setIsGameOver(true);
+        onTerminar(nuevoPuntaje);
       }
     }, 2000);
   };
 
-  const restartGame = () => {
-    setCurrentRound(0);
-    setScore(0);
-    setIsGameOver(false);
-    setResultMessage('');
+  return (
+    <Container className="text-center my-4" style={{ maxWidth: '600px' }}>
+      <h1 className="text-primary fw-bold mb-2">¡Hora de Comer!</h1>
+      <p className="text-muted mb-4">Granjero/a: <strong>{nombre}</strong></p>
+      
+      <Card className="p-4 shadow">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <span className="badge bg-info fs-6">Ronda: {currentRound + 1} / 5</span>
+          <span className="badge bg-warning text-dark fs-6">Puntaje: {score}</span>
+        </div>
+
+        <div className="animal-display my-4">
+          <span style={{ fontSize: '80px' }}>{ROUNDS[currentRound].animalEmoji}</span>
+          <h3 className="text-secondary mt-2">{ROUNDS[currentRound].animalName}</h3>
+        </div>
+
+        <div className="options-container d-grid gap-2 my-3">
+          {ROUNDS[currentRound].options.map((option, index) => (
+            <Button 
+              key={index}
+              variant="outline-primary"
+              size="lg"
+              onClick={() => handleOptionClick(option)}
+              disabled={showResult}
+            >
+              {option}
+            </Button>
+          ))}
+        </div>
+
+        <div style={{ minHeight: '30px' }} className="mt-2">
+          <span className={resultMessage.includes('Correcto') ? 'text-success fw-bold' : 'text-danger fw-bold'}>
+            {resultMessage}
+          </span>
+        </div>
+      </Card>
+    </Container>
+  );
+}
+
+function ResumenScreen({ nombre, puntaje1, puntaje2, onReiniciar }) {
+  const puntajeTotal = puntaje1 + puntaje2;
+
+  const obtenerMensajePersonalizado = (total) => {
+    if (total >= 40) {
+      return `¡Increíble trabajo, ${nombre}! Sos el mejor granjero de todos. ¡Puntaje brillante! 🌟`;
+    } else if (total >= 20) {
+      return `¡Muy bien hecho, ${nombre}! Demostraste conocer muy bien la granja. ¡Felicitaciones! 🎉`;
+    } else {
+      return `¡Buen esfuerzo, ${nombre}! Con un poco más de práctica serás un experto de la granja. 👍`;
+    }
   };
 
   return (
-    <div className="container game-container text-center">
-      <h1 className="text-primary fw-bold mb-4">¡Hora de Comer!</h1>
+    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+      <Card className="p-4 shadow text-center" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px' }}>
+        <Card.Body>
+          <h2 className="text-success mb-3">¡Aventura Finalizada! 🌾</h2>
+          <h4 className="mb-4 text-dark">¡Granjero/a: <strong>{nombre}</strong>!</h4>
+
+          <ListGroup variant="flush" className="mb-4 text-start">
+            <ListGroup.Item className="d-flex justify-content-between align-items-center">
+              Puntaje Juego 1 (Hora de Comer):
+              <span className="badge bg-primary rounded-pill fs-6">{puntaje1} pts</span>
+            </ListGroup.Item>
+            <ListGroup.Item className="d-flex justify-content-between align-items-center">
+              Puntaje Juego 2:
+              <span className="badge bg-primary rounded-pill fs-6">{puntaje2} pts</span>
+            </ListGroup.Item>
+            <ListGroup.Item className="d-flex justify-content-between align-items-center fw-bold bg-light">
+              Puntaje Total:
+              <span className="badge bg-success rounded-pill fs-5">{puntajeTotal} pts</span>
+            </ListGroup.Item>
+          </ListGroup>
+
+          <div className="alert alert-info py-3 mb-4" role="alert">
+            {obtenerMensajePersonalizado(puntajeTotal)}
+          </div>
+
+          <Button variant="primary" onClick={onReiniciar} size="lg" className="w-100">
+            Jugar de nuevo 🔄
+          </Button>
+        </Card.Body>
+      </Card>
+    </Container>
+  );
+}
+
+export function App() {
+  const [pantallaActual, setPantallaActual] = useState(1);
+  const [nombreJugador, setNombreJugador] = useState('');
+  const [puntajeJuego1, setPuntajeJuego1] = useState(0);
+  const [puntajeJuego2, setPuntajeJuego2] = useState(0);
+
+  const iniciarJuego = (nombre) => {
+    setNombreJugador(nombre);
+    setPantallaActual(2);
+  };
+
+  const terminarJuego1 = (puntaje) => {
+    setPuntajeJuego1(puntaje);
+    setPantallaActual(3);
+  };
+
+  const terminarJuego2 = (puntaje) => {
+    setPuntajeJuego2(puntaje);
+    setPantallaActual(4);
+  };
+
+  const reiniciarJuego = () => {
+    setNombreJugador('');
+    setPuntajeJuego1(0);
+    setPuntajeJuego2(0);
+    setPantallaActual(1);
+  };
+
+  return (
+    <div className="container my-4">
+      {pantallaActual === 1 && <LoginScreen onComenzar={iniciarJuego} />}
       
-      {isGameOver ? (
-        <div className="game-over-screen">
-          <h2>¡Juego Terminado!</h2>
-          <p className="fs-4">Tu puntaje final es: <strong>{score} / 50</strong></p>
-          <button className="btn btn-success btn-lg mt-3" onClick={restartGame}>
-            Volver a jugar
-          </button>
+      {pantallaActual === 2 && (
+        <JuegoUno nombre={nombreJugador} onTerminar={terminarJuego1} />
+      )}
+      
+      {pantallaActual === 3 && (
+        <div className="text-center mt-5">
+          <h2>Pantalla 3: Juego 2 (Pendiente)</h2>
+          <p className="text-muted">-----------</p>
+          <Button variant="warning" onClick={() => terminarJuego2(30)}>
+            Simular terminar Juego 2 (30 pts)
+          </Button>
         </div>
-      ) : (
-        <div className="play-screen">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <span className="badge bg-info fs-6">Ronda: {currentRound + 1} / 5</span>
-            <span className="badge bg-warning text-dark fs-6">Puntaje: {score}</span>
-          </div>
-
-          <div className="animal-display">
-            {/* Si preferís usar imágenes reales, cambiá el emoji por: <img src="ruta.jpg" alt="..." /> */}
-            <span className="animal-image">{ROUNDS[currentRound].animalEmoji}</span>
-            <h3 className="text-secondary">{ROUNDS[currentRound].animalName}</h3>
-          </div>
-
-          <div className="options-container">
-            {ROUNDS[currentRound].options.map((option, index) => (
-              <button 
-                key={index}
-                className="btn btn-outline-primary btn-lg"
-                onClick={() => handleOptionClick(option)}
-                disabled={showResult}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-
-          <div className={`result-message ${showResult ? 'visible' : 'invisible'}`}>
-            <span className={resultMessage.includes('Correcto') ? 'text-success' : 'text-danger'}>
-              {resultMessage}
-            </span>
-          </div>
-        </div>
+      )}
+      
+      {pantallaActual === 4 && (
+        <ResumenScreen
+          nombre={nombreJugador}
+          puntaje1={puntajeJuego1}
+          puntaje2={puntajeJuego2}
+          onReiniciar={reiniciarJuego}
+        />
       )}
     </div>
   );
