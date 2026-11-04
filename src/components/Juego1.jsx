@@ -84,5 +84,4 @@ function JuegoUno({ nombre, onTerminar }) {
   );
 }
 
-// Exportación al final
 export default JuegoUno;
