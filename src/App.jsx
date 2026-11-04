@@ -1,7 +1,8 @@
+
+
 import React, { useState } from 'react';
 import { Container, Card, Button, ListGroup, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Juego2 from './components/Juego2';
 
 function LoginScreen({ onComenzar }) {
   const [nombreInput, setNombreInput] = useState('');
@@ -177,27 +178,27 @@ export function App() {
   const [puntajeJuego1, setPuntajeJuego1] = useState(0);
   const [puntajeJuego2, setPuntajeJuego2] = useState(0);
 
-  const iniciarJuego = (nombre) => {
+  function iniciarJuego(nombre) {
     setNombreJugador(nombre);
     setPantallaActual(2);
-  };
+  }
 
-  const terminarJuego1 = (puntaje) => {
+  function terminarJuego1(puntaje) {
     setPuntajeJuego1(puntaje);
     setPantallaActual(3);
-  };
+  }
 
-  const terminarJuego2 = (puntaje) => {
+  function terminarJuego2(puntaje) {
     setPuntajeJuego2(puntaje);
     setPantallaActual(4);
-  };
+  }
 
-  const reiniciarJuego = () => {
+  function reiniciarJuego() {
     setNombreJugador('');
     setPuntajeJuego1(0);
     setPuntajeJuego2(0);
     setPantallaActual(1);
-  };
+  }
 
   return (
     <div className="container my-4">
@@ -208,10 +209,13 @@ export function App() {
       )}
       
       {pantallaActual === 3 && (
-      <Juego2 
-      nombreJugador={nombreJugador} 
-      onJuegoTerminado={terminarJuego2} 
-      />
+        <div className="text-center mt-5">
+          <h2>Pantalla 3: Juego 2 (Pendiente)</h2>
+          <p className="text-muted">-----------</p>
+          <Button variant="warning" onClick={() => terminarJuego2(30)}>
+            Simular terminar Juego 2 (30 pts)
+          </Button>
+        </div>
       )}
       {pantallaActual === 4 && (
         <ResumenScreen
