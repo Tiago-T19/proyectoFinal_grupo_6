@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Card, Button, ListGroup, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Juego2 from './components/Juego2';
 
 function LoginScreen({ onComenzar }) {
   const [nombreInput, setNombreInput] = useState('');
@@ -207,15 +208,11 @@ export function App() {
       )}
       
       {pantallaActual === 3 && (
-        <div className="text-center mt-5">
-          <h2>Pantalla 3: Juego 2 (Pendiente)</h2>
-          <p className="text-muted">-----------</p>
-          <Button variant="warning" onClick={() => terminarJuego2(30)}>
-            Simular terminar Juego 2 (30 pts)
-          </Button>
-        </div>
+      <Juego2 
+      nombreJugador={nombreJugador} 
+      onJuegoTerminado={terminarJuego2} 
+      />
       )}
-      
       {pantallaActual === 4 && (
         <ResumenScreen
           nombre={nombreJugador}
