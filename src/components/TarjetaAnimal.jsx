@@ -1,4 +1,6 @@
-export default function TarjetaAnimal({ animal, alSeleccionar, deshabilitado, fueSeleccionado }) {
+import React from 'react';
+
+function TarjetaAnimal({ animal, alSeleccionar, deshabilitado, fueSeleccionado }) {
   let claseCirculo = 'bg-success-subtle text-dark';
   let badgeIntruso = null;
 
@@ -11,17 +13,25 @@ export default function TarjetaAnimal({ animal, alSeleccionar, deshabilitado, fu
     }
   }
 
+  function manejarClick() {
+    if (!deshabilitado) {
+      alSeleccionar(animal);
+    }
+  }
+
+  function manejarKeyDown(e) {
+    if ((e.key === 'Enter' || e.key === ' ') && !deshabilitado) {
+      alSeleccionar(animal);
+    }
+  }
+
   return (
     <div className="col-12 col-md-4 text-center mb-3">
       <div
         role="button"
         tabIndex="0"
-        onClick={() => !deshabilitado && alSeleccionar(animal)}
-        onKeyDown={(e) => {
-          if ((e.key === 'Enter' || e.key === ' ') && !deshabilitado) {
-            alSeleccionar(animal);
-          }
-        }}
+        onClick={manejarClick}
+        onKeyDown={manejarKeyDown}
         className={`card h-100 p-4 border-0 shadow-sm align-items-center ${
           fueSeleccionado ? 'border border-3 border-warning' : ''
         }`}
@@ -34,8 +44,10 @@ export default function TarjetaAnimal({ animal, alSeleccionar, deshabilitado, fu
       >
         <div
           className={`rounded-circle d-flex align-items-center justify-content-center shadow-sm ${claseCirculo}`}
-          style={{ width: '135px', height: '135px', fontSize: '4.5rem' }}
+          // Aumenté la fuente a 5rem (aprox 80px) para que el emoji se vea gigante como una imagen
+          style={{ width: '135px', height: '135px', fontSize: '5rem' }}
         >
+          {/* Usamos el emoji en lugar de la etiqueta img */}
           {animal.emoji}
         </div>
         <h3 className="mt-3 mb-0 fw-bold">{animal.nombre}</h3>
@@ -44,3 +56,5 @@ export default function TarjetaAnimal({ animal, alSeleccionar, deshabilitado, fu
     </div>
   );
 }
+
+export { TarjetaAnimal };
