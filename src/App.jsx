@@ -1,12 +1,14 @@
-
-
 import React, { useState } from 'react';
 import { Container, Card, Button, ListGroup, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// 1. IMPORTACIONES DE TUS JUEGOS
+// Asegúrate de que la ruta coincida con dónde guardaste Juego1.jsx
+import JuegoUno from './components/Juego1'; 
 import { JuegoDos } from './components/Juego2'; 
 
-function LoginScreen({ onComenzar }) {
+// 2. PANTALLA DE LOGIN (Con función flecha)
+const LoginScreen = ({ onComenzar }) => {
   const [nombreInput, setNombreInput] = useState('');
 
   const handleSubmit = (e) => {
@@ -43,90 +45,10 @@ function LoginScreen({ onComenzar }) {
       </Card>
     </Container>
   );
-}
+};
 
-const ROUNDS = [
-  { id: 1, animalName: 'Vaca', animalEmoji: '🐄', options: ['Pasto', 'Carne', 'Banana'], answer: 'Pasto' },
-  { id: 2, animalName: 'Gallina', animalEmoji: '🐔', options: ['Maíz', 'Pasto', 'Pescado'], answer: 'Maíz' },
-  { id: 3, animalName: 'Chancho', animalEmoji: '🐷', options: ['Todo lo que encuentra', 'Solo Pasto', 'Solo Carne'], answer: 'Todo lo que encuentra' },
-  { id: 4, animalName: 'Oveja', animalEmoji: '🐑', options: ['Pasto', 'Hamburguesa', 'Pizza'], answer: 'Pasto' },
-  { id: 5, animalName: 'Caballo', animalEmoji: '🐴', options: ['Pasto y Zanahoria', 'Pollo', 'Helado'], answer: 'Pasto y Zanahoria' },
-];
-
-function JuegoUno({ nombre, onTerminar }) {
-  const [currentRound, setCurrentRound] = useState(0);
-  const [score, setScore] = useState(0);
-  const [showResult, setShowResult] = useState(false);
-  const [resultMessage, setResultMessage] = useState('');
-
-  const handleOptionClick = (selectedFood) => {
-    if (showResult) return;
-
-    const currentAnimal = ROUNDS[currentRound];
-    const isCorrect = selectedFood === currentAnimal.answer;
-    let nuevoPuntaje = score;
-
-    if (isCorrect) {
-      nuevoPuntaje = score + 10;
-      setScore(nuevoPuntaje);
-      setResultMessage(`¡Correcto! La ${currentAnimal.animalName} comió feliz. 😋`);
-    } else {
-      setResultMessage(`¡Esa no es su comida! 🤢`);
-    }
-
-    setShowResult(true);
-
-    setTimeout(() => {
-      setShowResult(false);
-      if (currentRound < ROUNDS.length - 1) {
-        setCurrentRound(prevRound => prevRound + 1);
-      } else {
-        onTerminar(nuevoPuntaje);
-      }
-    }, 2000);
-  };
-
-  return (
-    <Container className="text-center my-4" style={{ maxWidth: '600px' }}>
-      <h1 className="text-primary fw-bold mb-2">¡Hora de Comer!</h1>
-      <p className="text-muted mb-4">Granjero/a: <strong>{nombre}</strong></p>
-      
-      <Card className="p-4 shadow">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <span className="badge bg-info fs-6">Ronda: {currentRound + 1} / 5</span>
-          <span className="badge bg-warning text-dark fs-6">Puntaje: {score}</span>
-        </div>
-
-        <div className="animal-display my-4">
-          <span style={{ fontSize: '80px' }}>{ROUNDS[currentRound].animalEmoji}</span>
-          <h3 className="text-secondary mt-2">{ROUNDS[currentRound].animalName}</h3>
-        </div>
-
-        <div className="options-container d-grid gap-2 my-3">
-          {ROUNDS[currentRound].options.map((option, index) => (
-            <Button 
-              key={index}
-              variant="outline-primary"
-              size="lg"
-              onClick={() => handleOptionClick(option)}
-              disabled={showResult}
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
-
-        <div style={{ minHeight: '30px' }} className="mt-2">
-          <span className={resultMessage.includes('Correcto') ? 'text-success fw-bold' : 'text-danger fw-bold'}>
-            {resultMessage}
-          </span>
-        </div>
-      </Card>
-    </Container>
-  );
-}
-
-function ResumenScreen({ nombre, puntaje1, puntaje2, onReiniciar }) {
+// 3. PANTALLA DE RESUMEN FINAL (Con función flecha)
+const ResumenScreen = ({ nombre, puntaje1, puntaje2, onReiniciar }) => {
   const puntajeTotal = puntaje1 + puntaje2;
 
   const obtenerMensajePersonalizado = (total) => {
@@ -172,36 +94,40 @@ function ResumenScreen({ nombre, puntaje1, puntaje2, onReiniciar }) {
       </Card>
     </Container>
   );
-}
+};
 
-function App() {
+// 4. COMPONENTE PRINCIPAL APP (Con función flecha)
+const App = () => {
+  // Hooks de estado siempre al inicio
   const [pantallaActual, setPantallaActual] = useState(1);
   const [nombreJugador, setNombreJugador] = useState('');
   const [puntajeJuego1, setPuntajeJuego1] = useState(0);
   const [puntajeJuego2, setPuntajeJuego2] = useState(0);
 
-  function iniciarJuego(nombre) {
+  // Funciones manejadoras con sintaxis de flecha
+  const iniciarJuego = (nombre) => {
     setNombreJugador(nombre);
     setPantallaActual(2);
-  }
+  };
 
-  function terminarJuego1(puntaje) {
+  const terminarJuego1 = (puntaje) => {
     setPuntajeJuego1(puntaje);
     setPantallaActual(3);
-  }
+  };
 
-  function terminarJuego2(puntaje) {
+  const terminarJuego2 = (puntaje) => {
     setPuntajeJuego2(puntaje);
     setPantallaActual(4);
-  }
+  };
 
-  function reiniciarJuego() {
+  const reiniciarJuego = () => {
     setNombreJugador('');
     setPuntajeJuego1(0);
     setPuntajeJuego2(0);
     setPantallaActual(1);
-  }
+  };
 
+  // Renderizado principal
   return (
     <div className="container my-4">
       {pantallaActual === 1 && <LoginScreen onComenzar={iniciarJuego} />}
@@ -210,7 +136,6 @@ function App() {
         <JuegoUno nombre={nombreJugador} onTerminar={terminarJuego1} />
       )}
       
-    
       {pantallaActual === 3 && (
         <JuegoDos nombreJugador={nombreJugador} onTerminar={terminarJuego2} />
       )}
@@ -225,6 +150,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

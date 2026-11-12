@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Card, Button } from 'react-bootstrap';
 
+// 1. Constantes globales
 const ROUNDS = [
   { id: 1, animalName: 'Vaca', animalEmoji: '🐄', options: ['Pasto', 'Carne', 'Banana'], answer: 'Pasto' },
   { id: 2, animalName: 'Gallina', animalEmoji: '🐔', options: ['Maíz', 'Pasto', 'Pescado'], answer: 'Maíz' },
@@ -9,39 +10,45 @@ const ROUNDS = [
   { id: 5, animalName: 'Caballo', animalEmoji: '🐴', options: ['Pasto y Zanahoria', 'Pollo', 'Helado'], answer: 'Pasto y Zanahoria' },
 ];
 
-function JuegoUno({ nombre, onTerminar }) {
+// 2. Componente principal
+const JuegoUno = ({ nombre, onTerminar }) => {
+  // 3. Estados
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [resultMessage, setResultMessage] = useState('');
 
-  function handleOptionClick(selectedFood) {
+  const esUltimaRonda = currentRound === ROUNDS.length - 1;
+
+  // 4. Función para verificar la respuesta
+  const handleOptionClick = (selectedFood) => {
     if (showResult) return;
 
     const currentAnimal = ROUNDS[currentRound];
     const isCorrect = selectedFood === currentAnimal.answer;
-    let nuevoPuntaje = score;
 
     if (isCorrect) {
-      nuevoPuntaje = score + 10;
-      setScore(nuevoPuntaje);
-      setResultMessage(`¡Correcto! La ${currentAnimal.animalName} comió feliz. 😋`);
+      setScore(score + 10);
+      setResultMessage(`¡Correcto! La ${currentAnimal.animalName} comió feliz. 🥰`);
     } else {
       setResultMessage(`¡Esa no es su comida! 🤢`);
     }
 
     setShowResult(true);
+  };
 
-    setTimeout(function() {
+  // 5. Función para avanzar controlada por el botón
+  const handleSiguiente = () => {
+    if (!esUltimaRonda) {
+      setCurrentRound(currentRound + 1);
       setShowResult(false);
-      if (currentRound < ROUNDS.length - 1) {
-        setCurrentRound(currentRound + 1);
-      } else {
-        onTerminar(nuevoPuntaje);
-      }
-    }, 2000);
-  }
+      setResultMessage('');
+    } else {
+      onTerminar(score);
+    }
+  };
 
+  // 6. Renderizado
   return (
     <Container className="text-center my-4" style={{ maxWidth: '600px' }}>
       <h1 className="text-primary fw-bold mb-2">¡Hora de Comer!</h1>
@@ -59,29 +66,46 @@ function JuegoUno({ nombre, onTerminar }) {
         </div>
 
         <div className="options-container d-grid gap-2 my-3">
-          {ROUNDS[currentRound].options.map(function(option, index) {
-            return (
-              <Button 
-                key={index}
-                variant="outline-primary"
-                size="lg"
-                onClick={function() { handleOptionClick(option); }}
-                disabled={showResult}
-              >
-                {option}
-              </Button>
-            );
-          })}
+          {ROUNDS[currentRound].options.map((option, index) => (
+            <Button 
+              key={index}
+              variant="outline-primary"
+              size="lg"
+              onClick={() => handleOptionClick(option)} 
+              disabled={showResult}
+            >
+              {option}
+            </Button>
+          ))}
         </div>
 
-        <div style={{ minHeight: '30px' }} className="mt-2">
-          <span className={resultMessage.includes('Correcto') ? 'text-success fw-bold' : 'text-danger fw-bold'}>
-            {resultMessage}
-          </span>
+        {/* Zona inferior dinámica: Solo se muestra el mensaje y el botón si ya respondió */}
+        <div style={{ minHeight: '120px' }} className="mt-3">
+          {showResult && (
+            <div className="text-center">
+              <div
+                className={`alert ${
+                  resultMessage.includes('Correcto') ? 'alert-success border-success' : 'alert-danger border-danger'
+                } fs-5 fw-bold rounded-4 shadow-sm py-2 px-4 d-inline-block mb-3`}
+              >
+                {resultMessage}
+              </div>
+              
+              <div>
+                <button
+                  onClick={handleSiguiente}
+                  className="btn btn-warning btn-lg px-4 py-2 rounded-pill shadow fw-bold fs-5 text-dark"
+                  style={{ minWidth: '220px' }}
+                >
+                  {esUltimaRonda ? 'Ver Resultados 🏁' : 'Siguiente Animal ➔'}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </Card>
     </Container>
   );
-}
+};
 
 export default JuegoUno;
