@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Card, Button, ListGroup, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-// 1. IMPORTACIONES DE TUS JUEGOS
-// Asegúrate de que la ruta coincida con dónde guardaste Juego1.jsx
 import JuegoUno from './components/Juego1'; 
 import { JuegoDos } from './components/Juego2'; 
 
-// 2. PANTALLA DE LOGIN (Con función flecha)
 const LoginScreen = ({ onComenzar }) => {
   const [nombreInput, setNombreInput] = useState('');
 
@@ -47,7 +43,6 @@ const LoginScreen = ({ onComenzar }) => {
   );
 };
 
-// 3. PANTALLA DE RESUMEN FINAL (Con función flecha)
 const ResumenScreen = ({ nombre, puntaje1, puntaje2, onReiniciar }) => {
   const puntajeTotal = puntaje1 + puntaje2;
 
@@ -96,15 +91,12 @@ const ResumenScreen = ({ nombre, puntaje1, puntaje2, onReiniciar }) => {
   );
 };
 
-// 4. COMPONENTE PRINCIPAL APP (Con función flecha)
 const App = () => {
-  // Hooks de estado siempre al inicio
   const [pantallaActual, setPantallaActual] = useState(1);
   const [nombreJugador, setNombreJugador] = useState('');
   const [puntajeJuego1, setPuntajeJuego1] = useState(0);
   const [puntajeJuego2, setPuntajeJuego2] = useState(0);
 
-  // Funciones manejadoras con sintaxis de flecha
   const iniciarJuego = (nombre) => {
     setNombreJugador(nombre);
     setPantallaActual(2);
@@ -127,7 +119,6 @@ const App = () => {
     setPantallaActual(1);
   };
 
-  // Renderizado principal
   return (
     <div className="container my-4">
       {pantallaActual === 1 && <LoginScreen onComenzar={iniciarJuego} />}
