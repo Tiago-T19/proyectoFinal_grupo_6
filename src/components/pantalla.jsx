@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Container, Card, Button, ListGroup, Form } from 'react-bootstrap';
 
-function LoginScreen({ onComenzar }) {
+const LoginScreen = ({ onComenzar }) => {
   const [nombreInput, setNombreInput] = useState('');
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (nombreInput.trim() !== '') {
       onComenzar(nombreInput);
     }
-  }
+  };
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     setNombreInput(e.target.value);
-  }
+  };
 
   return (
     <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
@@ -42,12 +42,12 @@ function LoginScreen({ onComenzar }) {
       </Card>
     </Container>
   );
-}
+};
 
-function ResumenScreen({ nombre, puntaje1, puntaje2, onReiniciar }) {
+const ResumenScreen = ({ nombre, puntaje1, puntaje2, onReiniciar }) => {
   const puntajeTotal = puntaje1 + puntaje2;
 
-  function obtenerMensajePersonalizado(total) {
+  const obtenerMensajePersonalizado = (total) => {
     if (total >= 40) {
       return `¡Increíble trabajo, ${nombre}! Sos el mejor granjero de todos. ¡Puntaje brillante! 🌟`;
     } else if (total >= 20) {
@@ -55,7 +55,7 @@ function ResumenScreen({ nombre, puntaje1, puntaje2, onReiniciar }) {
     } else {
       return `¡Buen esfuerzo, ${nombre}! Con un poco más de práctica serás un experto de la granja. 👍`;
     }
-  }
+  };
 
   return (
     <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
@@ -90,7 +90,6 @@ function ResumenScreen({ nombre, puntaje1, puntaje2, onReiniciar }) {
       </Card>
     </Container>
   );
-}
+};
 
-// Exportamos las funciones al final
 export { LoginScreen, ResumenScreen };
