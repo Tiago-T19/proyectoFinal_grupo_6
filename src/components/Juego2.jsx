@@ -3,22 +3,21 @@ import { Container } from 'react-bootstrap';
 import { Marcador } from './Marcador';
 import { TarjetaAnimal } from './TarjetaAnimal';
 
-// Constantes fuera del componente
 const RONDAS_JUEGO_2 = [
   { 
     id: 1, 
     animales: [
-      { id: '1a', nombre: 'Perro', emoji: '🐶', esIntruso: false },
-      { id: '1b', nombre: 'Gato', emoji: '🐱', esIntruso: false },
-      { id: '1c', nombre: 'León', emoji: '🦁', esIntruso: true }
+      { id: '1a', nombre: 'Perro', imagen: '/IMG/Perro.png', esIntruso: false },
+      { id: '1b', nombre: 'Gato', imagen: '/IMG/Gato.png', esIntruso: false },
+      { id: '1c', nombre: 'León', imagen: '/IMG/Simba.jpg', esIntruso: true }
     ] 
   },
   { 
     id: 2, 
     animales: [
-      { id: '2a', nombre: 'Vaca', emoji: '🐄', esIntruso: false },
-      { id: '2b', nombre: 'Oveja', emoji: '🐑', esIntruso: false },
-      { id: '2c', nombre: 'Cocodrilo', emoji: '🐊', esIntruso: true }
+      { id: '2a', nombre: 'Vaca', imagen: '/IMG/Vaca.jpg', esIntruso: false },
+      { id: '2b', nombre: 'Oveja', imagen: '/IMG/Oveja.png', esIntruso: false },
+      { id: '2c', nombre: 'Cocodrilo', imagen: '/IMG/Cocodrilo.jpg', esIntruso: true }
     ] 
   },
   { 
