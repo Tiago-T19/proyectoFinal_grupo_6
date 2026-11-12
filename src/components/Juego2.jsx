@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap';
 import { Marcador } from './Marcador';
 import { TarjetaAnimal } from './TarjetaAnimal';
 
+// Constantes fuera del componente
 const RONDAS_JUEGO_2 = [
   { 
     id: 1, 
@@ -46,7 +47,8 @@ const RONDAS_JUEGO_2 = [
   }
 ];
 
-function JuegoDos({ nombreJugador, onTerminar }) {
+const JuegoDos = ({ nombreJugador, onTerminar }) => {
+  // Hooks de estado
   const [rondaActual, setRondaActual] = useState(0);
   const [puntaje, setPuntaje] = useState(0);
   const [respondido, setRespondido] = useState(false);
@@ -58,15 +60,15 @@ function JuegoDos({ nombreJugador, onTerminar }) {
   const totalRondas = RONDAS_JUEGO_2.length;
   const esUltimaRonda = rondaActual === totalRondas - 1;
 
-  useEffect(function() {
+  // Efecto para mezclar los animales
+  useEffect(() => {
     const animalesOriginales = RONDAS_JUEGO_2[rondaActual].animales;
-    const mezclados = [...animalesOriginales].sort(function() {
-      return Math.random() - 0.5;
-    });
+    const mezclados = [...animalesOriginales].sort(() => Math.random() - 0.5);
     setAnimalesMezclados(mezclados);
   }, [rondaActual]);
 
-  function handleSeleccion(animal) {
+  // Funciones manejadoras
+  const handleSeleccion = (animal) => {
     if (respondido) return;
 
     setRespondido(true);
@@ -80,9 +82,9 @@ function JuegoDos({ nombreJugador, onTerminar }) {
       setEsCorrecto(false);
       setMensaje('❌ ¡Oh no! Ese animal sí vive en la granja.');
     }
-  }
+  };
 
-  function handleSiguiente() {
+  const handleSiguiente = () => {
     if (!esUltimaRonda) {
       setRondaActual(rondaActual + 1);
       setRespondido(false);
@@ -91,8 +93,9 @@ function JuegoDos({ nombreJugador, onTerminar }) {
     } else {
       onTerminar(puntaje);
     }
-  }
+  };
 
+  // Renderizado
   return (
     <Container className="my-4">
       <div
@@ -119,17 +122,15 @@ function JuegoDos({ nombreJugador, onTerminar }) {
         />
 
         <div className="row justify-content-center align-items-center g-3 my-2">
-          {animalesMezclados.map(function(animal) {
-            return (
-              <TarjetaAnimal
-                key={animal.id}
-                animal={animal}
-                alSeleccionar={handleSeleccion}
-                deshabilitado={respondido}
-                fueSeleccionado={seleccionadoId === animal.id}
-              />
-            );
-          })}
+          {animalesMezclados.map((animal) => (
+            <TarjetaAnimal
+              key={animal.id}
+              animal={animal}
+              alSeleccionar={handleSeleccion}
+              deshabilitado={respondido}
+              fueSeleccionado={seleccionadoId === animal.id}
+            />
+          ))}
         </div>
 
         {!respondido ? (
@@ -162,6 +163,6 @@ function JuegoDos({ nombreJugador, onTerminar }) {
       </div>
     </Container>
   );
-}
+};
 
 export { JuegoDos };
