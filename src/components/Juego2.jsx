@@ -3,7 +3,6 @@ import { Container } from 'react-bootstrap';
 import { Marcador } from './Marcador';
 import { TarjetaAnimal } from './TarjetaAnimal';
 
-// Constantes fuera del componente
 const RONDAS_JUEGO_2 = [
   { 
     id: 1, 
@@ -48,7 +47,7 @@ const RONDAS_JUEGO_2 = [
 ];
 
 const JuegoDos = ({ nombreJugador, onTerminar }) => {
-  // Hooks de estado
+  
   const [rondaActual, setRondaActual] = useState(0);
   const [puntaje, setPuntaje] = useState(0);
   const [respondido, setRespondido] = useState(false);
@@ -60,14 +59,14 @@ const JuegoDos = ({ nombreJugador, onTerminar }) => {
   const totalRondas = RONDAS_JUEGO_2.length;
   const esUltimaRonda = rondaActual === totalRondas - 1;
 
-  // Efecto para mezclar los animales
+  
   useEffect(() => {
     const animalesOriginales = RONDAS_JUEGO_2[rondaActual].animales;
     const mezclados = [...animalesOriginales].sort(() => Math.random() - 0.5);
     setAnimalesMezclados(mezclados);
   }, [rondaActual]);
 
-  // Funciones manejadoras
+  
   const handleSeleccion = (animal) => {
     if (respondido) return;
 
@@ -95,7 +94,7 @@ const JuegoDos = ({ nombreJugador, onTerminar }) => {
     }
   };
 
-  // Renderizado
+  
   return (
     <Container className="my-4">
       <div

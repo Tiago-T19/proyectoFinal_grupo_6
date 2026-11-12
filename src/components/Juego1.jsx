@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Card, Button } from 'react-bootstrap';
 
-// 1. Constantes globales
+
 const ROUNDS = [
   { id: 1, animalName: 'Vaca', animalEmoji: '🐄', options: ['Pasto', 'Carne', 'Banana'], answer: 'Pasto' },
   { id: 2, animalName: 'Gallina', animalEmoji: '🐔', options: ['Maíz', 'Pasto', 'Pescado'], answer: 'Maíz' },
@@ -10,9 +10,9 @@ const ROUNDS = [
   { id: 5, animalName: 'Caballo', animalEmoji: '🐴', options: ['Pasto y Zanahoria', 'Pollo', 'Helado'], answer: 'Pasto y Zanahoria' },
 ];
 
-// 2. Componente principal
+
 const JuegoUno = ({ nombre, onTerminar }) => {
-  // 3. Estados
+
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
@@ -20,7 +20,7 @@ const JuegoUno = ({ nombre, onTerminar }) => {
 
   const esUltimaRonda = currentRound === ROUNDS.length - 1;
 
-  // 4. Función para verificar la respuesta
+  
   const handleOptionClick = (selectedFood) => {
     if (showResult) return;
 
@@ -37,7 +37,7 @@ const JuegoUno = ({ nombre, onTerminar }) => {
     setShowResult(true);
   };
 
-  // 5. Función para avanzar controlada por el botón
+  
   const handleSiguiente = () => {
     if (!esUltimaRonda) {
       setCurrentRound(currentRound + 1);
@@ -48,7 +48,7 @@ const JuegoUno = ({ nombre, onTerminar }) => {
     }
   };
 
-  // 6. Renderizado
+  
   return (
     <Container className="text-center my-4" style={{ maxWidth: '600px' }}>
       <h1 className="text-primary fw-bold mb-2">¡Hora de Comer!</h1>
@@ -79,7 +79,7 @@ const JuegoUno = ({ nombre, onTerminar }) => {
           ))}
         </div>
 
-        {/* Zona inferior dinámica: Solo se muestra el mensaje y el botón si ya respondió */}
+        
         <div style={{ minHeight: '120px' }} className="mt-3">
           {showResult && (
             <div className="text-center">
@@ -97,7 +97,7 @@ const JuegoUno = ({ nombre, onTerminar }) => {
                   className="btn btn-warning btn-lg px-4 py-2 rounded-pill shadow fw-bold fs-5 text-dark"
                   style={{ minWidth: '220px' }}
                 >
-                  {esUltimaRonda ? 'Ver Resultados 🏁' : 'Siguiente Animal ➔'}
+                  {esUltimaRonda ? 'Avanzar al siguiente Juego' : 'Siguiente Animal ➔'}
                 </button>
               </div>
             </div>
