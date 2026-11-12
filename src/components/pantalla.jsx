@@ -70,7 +70,7 @@ function ResumenScreen({ nombre, puntaje1, puntaje2, onReiniciar }) {
               <span className="badge bg-primary rounded-pill fs-6">{puntaje1} pts</span>
             </ListGroup.Item>
             <ListGroup.Item className="d-flex justify-content-between align-items-center">
-              Puntaje Juego 2:
+              Puntaje Juego 2 (El intruso de la granja):
               <span className="badge bg-primary rounded-pill fs-6">{puntaje2} pts</span>
             </ListGroup.Item>
             <ListGroup.Item className="d-flex justify-content-between align-items-center fw-bold bg-light">
