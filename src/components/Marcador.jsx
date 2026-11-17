@@ -1,6 +1,4 @@
-import React from 'react';
-
-const Marcador = ({ rondaActual, totalRondas, puntaje }) => {
+export default function Marcador({ rondaActual, totalRondas, puntaje }) {
   return (
     <div className="d-flex justify-content-between align-items-center mb-4 p-3 bg-white rounded-3 shadow-sm border">
       <span className="fs-5 fw-bold text-secondary">
@@ -11,6 +9,4 @@ const Marcador = ({ rondaActual, totalRondas, puntaje }) => {
       </span>
     </div>
   );
-};
-
-export { Marcador };
+}

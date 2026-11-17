@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Card, Button } from 'react-bootstrap';
-
+import { useNavigate } from 'react-router-dom';
+import { useAutorizaciones } from '../hooks/useAutorizaciones';
+import { usePartidas } from '../hooks/usePartidas';
 
 const ROUNDS = [
   { id: 1, animalName: 'Vaca', animalEmoji: '🐄', options: ['Pasto', 'Carne', 'Banana'], answer: 'Pasto' },
@@ -10,68 +12,68 @@ const ROUNDS = [
   { id: 5, animalName: 'Caballo', animalEmoji: '🐴', options: ['Pasto y Zanahoria', 'Pollo', 'Helado'], answer: 'Pasto y Zanahoria' },
 ];
 
-
-const JuegoUno = ({ nombre, onTerminar }) => {
-
+const Juego1 = () => {
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [resultMessage, setResultMessage] = useState('');
 
-  const esUltimaRonda = currentRound === ROUNDS.length - 1;
+  const { usuarioActivo } = useAutorizaciones();
+  const { setPuntajeJuego1 } = usePartidas();
+  const navegar = useNavigate();
 
-  
   const handleOptionClick = (selectedFood) => {
     if (showResult) return;
 
     const currentAnimal = ROUNDS[currentRound];
     const isCorrect = selectedFood === currentAnimal.answer;
+    let nuevoPuntaje = score;
 
     if (isCorrect) {
-      setScore(score + 10);
-      setResultMessage(`¡Correcto! La ${currentAnimal.animalName} comió feliz. 🥰`);
+      nuevoPuntaje = score + 10;
+      setScore(nuevoPuntaje);
+      setResultMessage(`¡Correcto! La ${currentAnimal.animalName} comió feliz. 😋`);
     } else {
-      setResultMessage(`¡Esa no es su comida! 🤢`);
+      setResultMessage('¡Esa no es su comida! 🤢');
     }
 
     setShowResult(true);
-  };
 
-  
-  const handleSiguiente = () => {
-    if (!esUltimaRonda) {
-      setCurrentRound(currentRound + 1);
+    setTimeout(() => {
       setShowResult(false);
       setResultMessage('');
-    } else {
-      onTerminar(score);
-    }
+      if (currentRound < ROUNDS.length - 1) {
+        setCurrentRound((prevRound) => prevRound + 1);
+      } else {
+        setPuntajeJuego1(nuevoPuntaje);
+        navegar('/juego2');
+      }
+    }, 2000);
   };
 
-  
   return (
     <Container className="text-center my-4" style={{ maxWidth: '600px' }}>
       <h1 className="text-primary fw-bold mb-2">¡Hora de Comer!</h1>
-      <p className="text-muted mb-4">Granjero/a: <strong>{nombre}</strong></p>
-      
+      <p className="text-muted mb-4">Granjero/a: <strong>{usuarioActivo.nombre}</strong></p>
+
       <Card className="p-4 shadow">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <span className="badge bg-info fs-6">Ronda: {currentRound + 1} / 5</span>
+          <span className="badge bg-info fs-6">Ronda: {currentRound + 1} / {ROUNDS.length}</span>
           <span className="badge bg-warning text-dark fs-6">Puntaje: {score}</span>
         </div>
 
-        <div className="animal-display my-4">
+        <div className="my-4">
           <span style={{ fontSize: '80px' }}>{ROUNDS[currentRound].animalEmoji}</span>
           <h3 className="text-secondary mt-2">{ROUNDS[currentRound].animalName}</h3>
         </div>
 
-        <div className="options-container d-grid gap-2 my-3">
+        <div className="d-grid gap-2 my-3">
           {ROUNDS[currentRound].options.map((option, index) => (
-            <Button 
+            <Button
               key={index}
               variant="outline-primary"
               size="lg"
-              onClick={() => handleOptionClick(option)} 
+              onClick={() => handleOptionClick(option)}
               disabled={showResult}
             >
               {option}
@@ -79,33 +81,14 @@ const JuegoUno = ({ nombre, onTerminar }) => {
           ))}
         </div>
 
-        
-        <div style={{ minHeight: '120px' }} className="mt-3">
-          {showResult && (
-            <div className="text-center">
-              <div
-                className={`alert ${
-                  resultMessage.includes('Correcto') ? 'alert-success border-success' : 'alert-danger border-danger'
-                } fs-5 fw-bold rounded-4 shadow-sm py-2 px-4 d-inline-block mb-3`}
-              >
-                {resultMessage}
-              </div>
-              
-              <div>
-                <button
-                  onClick={handleSiguiente}
-                  className="btn btn-warning btn-lg px-4 py-2 rounded-pill shadow fw-bold fs-5 text-dark"
-                  style={{ minWidth: '220px' }}
-                >
-                  {esUltimaRonda ? 'Avanzar al siguiente Juego' : 'Siguiente Animal ➔'}
-                </button>
-              </div>
-            </div>
-          )}
+        <div style={{ minHeight: '30px' }} className="mt-2">
+          <span className={resultMessage.includes('Correcto') ? 'text-success fw-bold' : 'text-danger fw-bold'}>
+            {resultMessage}
+          </span>
         </div>
       </Card>
     </Container>
   );
 };
 
-export default JuegoUno;
+export default Juego1;

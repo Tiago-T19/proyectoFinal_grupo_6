@@ -7,7 +7,7 @@ const TarjetaAnimal = ({ animal, alSeleccionar, deshabilitado, fueSeleccionado }
   if (deshabilitado) {
     if (animal.esIntruso) {
       claseCirculo = 'bg-danger text-white';
-      badgeIntruso = <span className="text-danger fw-bold mt-2 fs-5">¡INTRUSO!</span>;
+      badgeIntruso = <span className="text-danger fw-bold mt-1 fs-5">¡INTRUSO!</span>;
     } else {
       claseCirculo = 'bg-success text-white';
     }
@@ -44,11 +44,21 @@ const TarjetaAnimal = ({ animal, alSeleccionar, deshabilitado, fueSeleccionado }
       >
         <div
           className={`rounded-circle d-flex align-items-center justify-content-center shadow-sm ${claseCirculo}`}
-          style={{ width: '135px', height: '135px', fontSize: '5rem' }}
+          style={{ width: '135px', height: '135px', overflow: 'hidden' }}
         >
-          {animal.emoji}
+          {animal.imagen ? (
+            <img
+              src={animal.imagen}
+              alt={animal.nombre}
+              className="img-fluid"
+              style={{ width: '95px', height: '95px', objectFit: 'contain' }}
+            />
+          ) : (
+            <span style={{ fontSize: '4.5rem', lineHeight: 1 }}>{animal.emoji}</span>
+          )}
         </div>
-        <h3 className="mt-3 mb-0 fw-bold">{animal.nombre}</h3>
+
+        <h3 className="fw-bold text-dark mt-3 mb-0">{animal.nombre}</h3>
         {badgeIntruso}
       </div>
     </div>
