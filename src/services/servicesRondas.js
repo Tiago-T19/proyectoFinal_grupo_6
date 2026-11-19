@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const listarRondasJuego2 = async () => {
     try {
-        const respuesta = await axios.get('/data/RondaJuego2.json');
+        const respuesta = await axios.get('/data/rondasJuego2.json');
         if (!respuesta.data || typeof respuesta.data === 'string') {
             throw new Error("Hay un error en el archivo de rondas");
         }

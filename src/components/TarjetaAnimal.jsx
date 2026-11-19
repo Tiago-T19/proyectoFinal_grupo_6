@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 
 const TarjetaAnimal = ({ animal, alSeleccionar, deshabilitado, fueSeleccionado }) => {
@@ -65,4 +66,6 @@ const TarjetaAnimal = ({ animal, alSeleccionar, deshabilitado, fueSeleccionado }
   );
 };
 
-export default TarjetaAnimal;
+export { TarjetaAnimal };
+=======
+>>>>>>> origin
